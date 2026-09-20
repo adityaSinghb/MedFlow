@@ -2,10 +2,13 @@ import React, { useState } from 'react';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from './ui/alert-dialog';
-import { Activity, Radar, Users, Zap, RotateCw, Sun, Moon } from 'lucide-react';
+import { Activity, Radar, Users, Zap, RotateCw, Sun, Moon, LogOut } from 'lucide-react';
 import { useSimulationStore } from '../store/useSimulationStore';
 import { HEADER } from '../constants/testIds/medflow';
 import { toast } from 'sonner';
+import { useAuth } from '../auth/AuthProvider';
+import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from './ui/dropdown-menu';
 
 function Stat({ label, value, id }) {
   return (
@@ -31,6 +34,7 @@ export default function Header({ onTabChange, onOpenNewCase, onOpenPatients }) {
   const reset = useSimulationStore(s => s.resetSimulation);
   const theme = useSimulationStore(s => s.theme);
   const toggleTheme = useSimulationStore(s => s.toggleTheme);
+  const { user, logout } = useAuth();
   const [surging, setSurging] = useState(false);
 
   const handleSurge = async () => {
@@ -90,13 +94,38 @@ export default function Header({ onTabChange, onOpenNewCase, onOpenPatients }) {
               </AlertDialogHeader>
               <AlertDialogFooter>
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction onClick={async () => { await reset(); toast.success('Simulation restored to initial state.'); }}>Reset Simulation</AlertDialogAction>
+                <AlertDialogAction data-testid="btn-confirm-reset" onClick={async () => { await reset(); toast.success('Simulation restored to initial state.'); }}>Reset Simulation</AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>
           </AlertDialog>
           <Button variant="ghost" size="icon" onClick={toggleTheme} data-testid={HEADER.themeToggle} aria-label="Toggle theme">
             {theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
           </Button>
+          {user && (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button className="ml-1 rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-ring" data-testid="user-menu-trigger">
+                  <Avatar className="h-8 w-8 border border-border">
+                    {user.picture && <AvatarImage src={user.picture} alt={user.name} />}
+                    <AvatarFallback className="text-xs font-mono">{(user.name || user.email || '?').slice(0,2).toUpperCase()}</AvatarFallback>
+                  </Avatar>
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56 bg-popover">
+                <DropdownMenuLabel className="text-xs">
+                  <div className="font-medium truncate">{user.name}</div>
+                  <div className="text-muted-foreground font-mono text-[11px] truncate">{user.email}</div>
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  data-testid="btn-logout"
+                  onClick={async () => { await logout(); toast('Signed out'); window.location.href = '/login'; }}
+                >
+                  <LogOut className="h-4 w-4 mr-2" /> Sign out
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
         </div>
       </div>
     </header>

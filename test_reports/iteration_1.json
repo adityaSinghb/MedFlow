@@ -1,0 +1,42 @@
+{
+  "summary": "First-pass smoke test of MedFlow (backend + frontend). Backend /api/state GET/PUT/DELETE all work and return persisted MongoDB state with 5 seeded hospitals + 3 seeded patients. Frontend loads cleanly with no console/page errors. Header, tabs, intake form, Leaflet map click, dispatch flow, classification, dispatch feed with timestamps, hospital cards (5), discharge, simulate surge, patients portal, and analytics (Recharts) all render and respond as expected.",
+  "tested_scope": ["frontend", "backend", "integration"],
+  "passed": [
+    "GET /api/state returns 200 with seeded state (5 hospitals, 3 patients)",
+    "PUT /api/state persists arbitrary payload and returns {ok:true}",
+    "DELETE /api/state clears state (subsequent GET returns {state:null})",
+    "App loads at / with no runtime/console errors; dark theme applied",
+    "Header shows MedFlow branding, Network Live pulse, Cases/Util./Holding/Avg km stats, action buttons",
+    "theme-toggle button present",
+    "All tabs render: tab-dispatcher, tab-hospitals, tab-patients, tab-analytics",
+    "Intake form: description input, severity chips (critical/severe/moderate), Leaflet map, dispatch button work",
+    "Critical 'Gunshot wound' case → classification chip shows 'Trauma Surgeon', dispatch succeeds, dispatch-feed populates step-by-step lines with timestamps, header CASES stat increments to 1",
+    "OB-GYN case ('pregnancy contractions fetal distress') classified as OB-GYN correctly",
+    "Hospital Network tab renders 5 hospital-card-* entries with discharge-btn-* buttons; discharge click succeeds without error",
+    "Simulate Surge button executes multiple times (surge-complete toasts shown, CASES climbed to 16)",
+    "Analytics tab renders 15 Recharts SVG surfaces (all 5 charts + subcomponents)",
+    "Patient Footprint tab lists Alex/Jordan/Priya, Medication Ledger renders with Discontinue buttons and Add Medication dialog trigger (patient-add-med present)"
+  ],
+  "failed": [
+    {
+      "area": "OB-GYN routing target",
+      "issue": "OB-GYN case did not visibly route to St. Jude's in Recent Dispatches. Likely because all 5 seeded hospitals have OB-GYN available, so nearest-with-specialist wins based on click coordinate. Not necessarily a bug, but expected-routing assertion from spec not confirmed.",
+      "evidence": "Console log: 'St. Jude appears (OB-GYN routing): False' after OB-GYN dispatch to map center.",
+      "priority": "LOW"
+    },
+    {
+      "area": "Reset confirmation dialog",
+      "issue": "Automated test could not locate/confirm the Reset confirmation button reliably; final screenshot shows CASES=16 after the reset attempt, suggesting the confirm step in the dialog was not triggered. Needs a data-testid like 'btn-confirm-reset' on the AlertDialog action to be robust.",
+      "evidence": "Playwright fallbacks (btn-confirm-reset / confirm-reset / role=button name~Reset) did not fire; header CASES remained 16.",
+      "priority": "MEDIUM"
+    }
+  ],
+  "action_items": [
+    "Add a stable data-testid (e.g. 'btn-confirm-reset') to the Reset confirmation AlertDialog action so automation and users can reliably confirm reset.",
+    "Optionally verify OB-GYN routing preference (should preferentially route to St. Jude's when equidistant / high pregnancy zone match) or update spec expectation to 'nearest hospital with OB-GYN available'."
+  ],
+  "success_rate": {"backend": "100%", "frontend": "~92%"},
+  "retest_needed": false,
+  "full_testing_deferred": true,
+  "notes": "Not covered in this quick pass (deferred to full testing agent): new-patient-footprint creation flow (Warfarin -> Blood Thinners/Anticoagulant alerts), existing patient link summary in dispatch card, holding-queue auto-redispatch on discharge, medication duplicate error toast, persistence-after-reload check, dispatch-button disabled-state matrix, responsive 1920x900 3-column layout screenshot verification."
+}
