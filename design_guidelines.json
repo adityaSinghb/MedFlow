@@ -1,0 +1,116 @@
+{
+  "project_name": "MedFlow",
+  "design_philosophy": "Tactical Minimalism & Emergency Command Center. High density, pure data clarity, true-dark base with high-contrast semantic indicators. A hybrid SaaS app with real-time simulation feel, not a generic admin dashboard.",
+  "theme": "dark-first-with-toggle",
+  "typography": {
+    "headings": "IBM Plex Sans",
+    "body": "IBM Plex Sans",
+    "terminal_feed": "JetBrains Mono",
+    "weights": [400, 500, 600, 700],
+    "rules": [
+      "Do not use generic fonts like Inter, Roboto, or Space Grotesk.",
+      "Use tight letter spacing (tracking-tight) for large stats and headers.",
+      "Overlines and labels must be uppercase, tiny, wide spacing (tracking-[0.2em]).",
+      "Terminal feed must use JetBrains Mono or similar authentic monospace data font.",
+      "Body text should be highly legible, avoiding overly thin weights in dark mode."
+    ]
+  },
+  "colors": {
+    "background": {
+      "dark": "#020617",
+      "dark_surface": "#0F172A",
+      "light": "#F8FAFC",
+      "light_surface": "#FFFFFF"
+    },
+    "text": {
+      "primary": "#F8FAFC",
+      "secondary": "#94A3B8"
+    },
+    "semantic_status": {
+      "critical": "#EF4444",
+      "severe": "#F97316",
+      "moderate": "#FACC15",
+      "available": "#22C55E",
+      "info": "#3B82F6",
+      "locked": "#A855F7"
+    },
+    "rules": [
+      "Use Tinted Grey rule: no pure #000000 or #808080. Base is a near-black slate/blue-gray to reduce glare in long sessions.",
+      "Semantic colors dictate action and urgency; keep decorative color usage to an absolute minimum.",
+      "CRITICAL: Do not use Teal Green or Teal Blue (#1B93A4) for dashboards."
+    ]
+  },
+  "layouts": {
+    "global_header": "Glassmorphism header (backdrop-blur-xl bg-slate-950/70) with MedFlow branding, live pulse indicator, quick stats, and global actions. Ensure nav links remain readable.",
+    "dispatcher_console": "High Density 3-column grid (grid-cols-1 lg:grid-cols-3 gap-6). Col 1: Intake Form. Col 2: Live Terminal Feed. Col 3: Holding Queue/Recent Dispatches.",
+    "hospital_capacity_network": "Bento Grid Protocol Mode B (High Density Grid). 5 hospital cards displaying demographics, capacity, equipment, specialists. Tight gap spacing.",
+    "patient_footprint": "2-column layout. Left: Patient Demographics & History. Right: Medication Ledger with CRUD operations.",
+    "analytics": "Dense grid containing 5 Recharts components. Use subtle grid borders (border-border/40) for structure to enforce the 'Technical' look."
+  },
+  "visual_enhancers": {
+    "terminal_feed": "Retro-Futurism style terminal. Deep black background (#000000), neon semantic monospaced text, staggered entrance animations.",
+    "cards": "Grid Borders ('Technical' Look). Flat background, 1px subtle border, no shadow. Hover: slight lift, border color darkens/illuminates slightly.",
+    "live_indicator": "Pulsing animation using a colored dot (usually green or red based on network status) in the global header."
+  },
+  "components": {
+    "intake_form": "Shadcn Form. Must include medical history capture (medications, conditions). Integrate Leaflet map with OpenStreetMap tiles for incident location.",
+    "terminal_feed": "Custom component with overflow-y-auto, auto-scroll to bottom, Framer Motion for line-by-line staggered entry.",
+    "medication_ledger": "Shadcn Table for CRUD. Badges for drug interaction warnings.",
+    "toast_notifications": "Use Sonner for dispatches, queue events, and simulation resets.",
+    "charts": "Recharts with dark-mode optimized styling (translucent fills, thin bright lines, restrained or hidden gridlines).",
+    "badges": "Sharp edges or subtle roundness (max 4px radius). Use solid or outlined variations to indicate status."
+  },
+  "motion": {
+    "rules": [
+      "Staggered entrance for terminal lines.",
+      "Subtle pulse for live network indicator.",
+      "Micro-interactions on hover for all interactive elements (buttons, cards).",
+      "Toast slide-ins for critical dispatch and queue events."
+    ]
+  },
+  "image_urls": {
+    "hospital_avatar": {
+      "url": "https://images.unsplash.com/photo-1626315869436-d6781ba69d6e?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxODh8MHwxfHNlYXJjaHwyfHxob3NwaXRhbCUyMGJ1aWxkaW5nJTIwbW9kZXJuJTIwYXJjaGl0ZWN0dXJlfGVufDB8fHx8MTc4OTg5MDU5MXww&ixlib=rb-4.1.0&q=85",
+      "description": "Modern hospital building"
+    },
+    "doctor_portrait": {
+      "url": "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1ODB8MHwxfHNlYXJjaHwxfHxkb2N0b3IlMjBwb3J0cmFpdHxlbnwwfHx8fDE3ODk4OTA1OTF8MA&ixlib=rb-4.1.0&q=85",
+      "description": "Doctor portrait"
+    },
+    "rescue_helicopter": {
+      "url": "https://images.unsplash.com/photo-1557818673-effec50525e1?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2Mzl8MHwxfHNlYXJjaHwxfHxtZWRpY2FsJTIwcmVzY3VlJTIwaGVsaWNvcHRlcnxlbnwwfHx8fDE3ODk4OTA1OTF8MA&ixlib=rb-4.1.0&q=85",
+      "description": "Medical rescue helicopter"
+    }
+  },
+  "accessibility": {
+    "rules": [
+      "Minimum 4.5:1 contrast for normal text and 3:1 for large text (WCAG AA).",
+      "All interactive elements MUST include data-testid attribute.",
+      "Focus states must have higher contrast.",
+      "Respect prefers-reduced-motion for animations."
+    ]
+  },
+  "instructions_to_main_agent": [
+    "Share the guideline for .js files not for .tsx files.",
+    "Implement Leaflet map with OpenStreetMap tiles for the incident map in the intake form.",
+    "Integrate patient medical history (medications + conditions) into the new trauma case intake form.",
+    "Build the animated terminal-style dispatch feed with a monospaced font.",
+    "Create the 5 Recharts as requested (Crime vs Equipment, Pregnancy vs Equipment, Senior Ratio vs Waiting Area, Bed Utilization, Dispatch Distance).",
+    "Use Shadcn components for complex interactions but style them to match the tactical dark theme.",
+    "CRITICAL: Do not use complete transparent background in headers, overlays, or dropdowns. Always use glassmorphism or solid backgrounds.",
+    "Ensure the Holding Queue auto-redispatches on discharge.",
+    "Provide testing attributes for all actionable UI elements (e.g., data-testid='submit-intake')."
+  ],
+  "UNIVERSAL GUIDELINES FOR MAIN AGENT": [
+    "Create depth through layered design elements with z-index hierarchy.",
+    "Use glass-morphism effects with backdrop filters (12-24px blur).",
+    "You MUST NOT apply universal transition (e.g., transition: all) as it breaks transforms.",
+    "You MUST NOT center align the app container, i.e. do not add .App { text-align: center; } in the css file.",
+    "NEVER use AI assistant Emoji characters like 🤖🧠💭💡🔮🎯 etc. for icons.",
+    "Every interaction needs micro-animations - hover states, transitions, parallax effects, and entrance animations.",
+    "Use 2-3x more spacing than feels comfortable. Cramped designs look cheap.",
+    "Prioritize using pre-existing components from src/components/ui when applicable.",
+    "Use `sonner` for toasts located in /app/src/components/ui/sonner.js (or relevant file).",
+    "All interactive and key informational elements MUST include a data-testid attribute to facilitate robust automated testing."
+  ]
+}

@@ -1,0 +1,135 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import url('https://unpkg.com/leaflet@1.9.4/dist/leaflet.css');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+    margin: 0;
+    font-family: 'IBM Plex Sans', system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-feature-settings: 'ss01', 'cv11';
+}
+
+.font-mono, code, pre, .terminal {
+    font-family: 'JetBrains Mono', ui-monospace, Menlo, Monaco, Consolas, monospace;
+    font-feature-settings: 'zero', 'ss02';
+}
+
+@layer base {
+    :root {
+        /* Light theme (secondary) */
+        --background: 210 20% 98%;
+        --foreground: 222 47% 11%;
+        --card: 0 0% 100%;
+        --card-foreground: 222 47% 11%;
+        --popover: 0 0% 100%;
+        --popover-foreground: 222 47% 11%;
+        --primary: 222 47% 11%;
+        --primary-foreground: 210 40% 98%;
+        --secondary: 210 40% 96%;
+        --secondary-foreground: 222 47% 11%;
+        --muted: 210 40% 96%;
+        --muted-foreground: 215 16% 47%;
+        --accent: 210 40% 94%;
+        --accent-foreground: 222 47% 11%;
+        --destructive: 0 84% 60%;
+        --destructive-foreground: 210 40% 98%;
+        --border: 214 32% 91%;
+        --input: 214 32% 91%;
+        --ring: 222 47% 11%;
+        --radius: 0.5rem;
+    }
+    .dark {
+        /* MedFlow tactical dark palette */
+        --background: 222 47% 4%;         /* #05070E near slate-950 */
+        --foreground: 210 40% 98%;        /* #F8FAFC */
+        --card: 222 45% 7%;               /* #0B1220 */
+        --card-foreground: 210 40% 98%;
+        --popover: 222 45% 6%;
+        --popover-foreground: 210 40% 98%;
+        --primary: 210 40% 98%;
+        --primary-foreground: 222 47% 4%;
+        --secondary: 217 33% 12%;          /* slate-900 tint */
+        --secondary-foreground: 210 40% 98%;
+        --muted: 217 33% 12%;
+        --muted-foreground: 215 20% 65%;
+        --accent: 217 33% 14%;
+        --accent-foreground: 210 40% 98%;
+        --destructive: 0 72% 51%;
+        --destructive-foreground: 210 40% 98%;
+        --border: 217 25% 16%;
+        --input: 217 25% 16%;
+        --ring: 210 100% 66%;
+    }
+}
+
+@layer base {
+    * { @apply border-border; }
+    body { @apply bg-background text-foreground; }
+    html { color-scheme: dark; }
+    .dark html { color-scheme: dark; }
+}
+
+/* Semantic status colors */
+.status-critical { color: #EF4444; }
+.status-severe   { color: #F97316; }
+.status-moderate { color: #FACC15; }
+.status-available{ color: #22C55E; }
+.status-info     { color: #3B82F6; }
+.status-locked   { color: #A855F7; }
+
+.bg-critical  { background-color: rgba(239,68,68,0.12); border-color: rgba(239,68,68,0.35); }
+.bg-severe    { background-color: rgba(249,115,22,0.12); border-color: rgba(249,115,22,0.35); }
+.bg-moderate  { background-color: rgba(250,204,21,0.12); border-color: rgba(250,204,21,0.35); }
+.bg-available { background-color: rgba(34,197,94,0.12); border-color: rgba(34,197,94,0.35); }
+.bg-info      { background-color: rgba(59,130,246,0.12); border-color: rgba(59,130,246,0.35); }
+.bg-locked    { background-color: rgba(168,85,247,0.12); border-color: rgba(168,85,247,0.35); }
+
+/* Live pulse */
+@keyframes pulse-ring {
+    0%   { box-shadow: 0 0 0 0 rgba(34,197,94,0.55); }
+    70%  { box-shadow: 0 0 0 10px rgba(34,197,94,0); }
+    100% { box-shadow: 0 0 0 0 rgba(34,197,94,0); }
+}
+.live-dot {
+    background: #22C55E;
+    animation: pulse-ring 1.8s cubic-bezier(0.4,0,0.6,1) infinite;
+}
+
+/* Terminal styling */
+.terminal-scroll::-webkit-scrollbar { width: 6px; }
+.terminal-scroll::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 3px; }
+
+/* Leaflet dark mode filter */
+.dark .leaflet-tile {
+    filter: brightness(0.55) contrast(1.15) hue-rotate(180deg) invert(1) saturate(0.8);
+}
+.leaflet-container {
+    background: #0B1220;
+    border-radius: 8px;
+    outline: none;
+}
+
+/* Utility */
+.tracking-widest2 { letter-spacing: 0.2em; }
+.no-scrollbar::-webkit-scrollbar { display: none; }
+
+/* Card hover */
+.tactical-card {
+    background: hsl(var(--card));
+    border: 1px solid hsl(var(--border));
+    transition: border-color 200ms ease, transform 200ms ease;
+}
+.tactical-card:hover {
+    border-color: rgba(59,130,246,0.4);
+}
+
+/* Focus */
+:focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+    border-radius: 4px;
+}
